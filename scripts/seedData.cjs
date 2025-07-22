@@ -1,16 +1,24 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
+const dotenv = require('dotenv');
+require('dotenv').config({ path: '../.env' });
 
+if (!process.env.MONGODB_URI) {
+  console.error("❌ MONGODB_URI is not defined. Check your .env file.");
+  process.exit(1);
+}
 // Import models
 const User = require('../models/User.cjs');
 const Service = require('../models/Service.cjs');
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/vastram-final', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(process.env.MONGODB_URI )
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ Connection error:", err));
+// mongoose.connect(process.env.MONGODB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
 
 // Sample users data
 const users = [
@@ -299,6 +307,8 @@ async function seedDatabase() {
     console.log('Customer: rajesh@example.com / customer123');
     
     console.log('\n🚀 You can now start the Vastram API server!');
+    console.log("MONGODB_URI:", process.env.MONGODB_URI);
+
     
   } catch (error) {
     console.error('❌ Error seeding database:', error);

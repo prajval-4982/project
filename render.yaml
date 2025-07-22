@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: vastram-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: vastram-db
+          property: connectionString
+    plan: free

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const serviceSchema = new mongoose.Schema({
+  // Schema definition remains the same
   name: {
     type: String,
     required: [true, 'Service name is required'],
@@ -78,4 +79,5 @@ serviceSchema.statics.getPopular = function() {
   return this.find({ isPopular: true, isActive: true }).sort({ price: 1 });
 };
 
-module.exports = mongoose.model('VastramService', serviceSchema);
+// Explicitly set the collection name to 'vastramservices'
+module.exports = mongoose.model('VastramService', serviceSchema, 'vastramservices');

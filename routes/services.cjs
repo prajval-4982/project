@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const { body, validationResult, query } = require('express-validator');
 const Service = require('../models/Service.cjs');
 const { authenticateToken, requireAdmin, optionalAuth } = require('../middleware/auth.cjs');
@@ -16,6 +17,7 @@ router.get('/', [
   query('popular').optional().isBoolean()
 ], optionalAuth, async (req, res) => {
   try {
+    console.log('Fetching services with query:', req.query);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -32,6 +34,7 @@ router.get('/', [
 
     // Build query
     let query = { isActive: true };
+    console.log('Initial query:', query);
 
     if (category) {
       query.category = category;
@@ -47,8 +50,9 @@ router.get('/', [
       query.isPopular = true;
     }
 
-    let services;
+    console.log('Final query:', query);
     let total;
+    let services;
 
     if (search) {
       // Text search
